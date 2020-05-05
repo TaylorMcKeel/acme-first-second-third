@@ -4,7 +4,7 @@ const users = [
   { id: 1, name: "moe", slot: "first" },
   { id: 2, name: "larry", slot: "second" },
   { id: 3, name: "curly", slot: "third" },
-  { id: 4, name: "lucy", slot: "third", slected: true },
+  { id: 4, name: "lucy", slot: "third" },
 ];
 
 const app = document.querySelector("#root");
@@ -35,9 +35,9 @@ const createDivs = () => {
   firstRight.addEventListener("click", (ev) => {
     ev.preventDefault();
     users.map((user) => {
-      if (user.slot === "first") {
+      if (user.slot === "first" && user.selected) {
         user.slot = "second";
-        console.log(user);
+        user.selected = false;
       }
       renderUsers();
     });
@@ -48,8 +48,9 @@ const createDivs = () => {
   secondRight.addEventListener("click", (ev) => {
     ev.preventDefault();
     users.map((user) => {
-      if (user.slot === "second") {
+      if (user.slot === "second" && user.selected) {
         user.slot = "third";
+        user.selected = false;
       }
       renderUsers();
     });
@@ -60,8 +61,9 @@ const createDivs = () => {
   secondLeft.addEventListener("click", (ev) => {
     ev.preventDefault();
     users.map((user) => {
-      if (user.slot === "second") {
+      if (user.slot === "second" && user.selected) {
         user.slot = "first";
+        user.selected = false;
       }
       renderUsers();
     });
@@ -72,8 +74,10 @@ const createDivs = () => {
   thirdLeft.addEventListener("click", (ev) => {
     ev.preventDefault();
     users.map((user) => {
-      if (user.slot === "third") {
+      console.log(user);
+      if (user.slot === "third" && user.selected) {
         user.slot = "second";
+        user.selected = false;
       }
       renderUsers();
     });
@@ -132,7 +136,18 @@ const renderUsers = () => {
     nameBox.classList.add("nameBox");
     nameBox.innerText = user.name;
     nameBox.addEventListener("click", (ev) => {
+      console.log(ev.target.innerText);
       ev.target.classList.toggle("selected");
+      users.map((user) => {
+        if (user.name === ev.target.innerText && !user.selected) {
+          user.selected = true;
+          return;
+        }
+        if (user.name === ev.target.innerText && user.selected) {
+          user.selected = false;
+          return;
+        }
+      });
     });
 
     if (user.slot === "first") {
